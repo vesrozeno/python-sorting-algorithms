@@ -87,6 +87,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             sorted_numbers = bubble_sort(numbers)
         elif sorting_algorithm == 'quick_sort':
             sorted_numbers = quick_sort(numbers)
+        elif sorting_algorithm == 'insertion_sort':
+            sorted_numbers = insertion_sort(numbers)
+        elif sorting_algorithm == 'selection_sort':
+             sorted_numbers = selection_sort(numbers)
+        elif sorting_algorithm == merge_sort(numbers)
+             sorted_numbers = merge_sort(numbers)
         else:
             sorted_numbers = 'Invalid sorting algorithm specified'
         
