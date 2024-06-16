@@ -8,6 +8,7 @@ def generate_data(size):
 # Implementações de diferentes algoritmos de ordenação
 
 def bubble_sort(arr):
+    print(f"Running bubble_sort on data of size {len(arr)}")
     n = len(arr)
     for i in range(n):
         for j in range(0, n-i-1):
@@ -16,6 +17,7 @@ def bubble_sort(arr):
     return arr
 
 def insertion_sort(arr):
+    print(f"Running insertion_sort on data of size {len(arr)}")
     for i in range(1, len(arr)):
         key = arr[i]
         j = i-1
@@ -26,6 +28,7 @@ def insertion_sort(arr):
     return arr
 
 def selection_sort(arr):
+    print(f"Running selection_sort on data of size {len(arr)}")
     for i in range(len(arr)):
         min_idx = i
         for j in range(i+1, len(arr)):
@@ -35,6 +38,7 @@ def selection_sort(arr):
     return arr
 
 def quick_sort(arr):
+    print(f"Running quick_sort on data of size {len(arr)}")
     if len(arr) <= 1:
         return arr
     pivot = arr[len(arr) // 2]
@@ -44,6 +48,7 @@ def quick_sort(arr):
     return quick_sort(left) + middle + quick_sort(right)
 
 def merge_sort(arr):
+    print(f"Running merge_sort on data of size {len(arr)}")
     if len(arr) <= 1:
         return arr
     mid = len(arr) // 2
@@ -67,10 +72,15 @@ def merge(left, right):
 
 # Função para medir o tempo de execução de cada algoritmo
 def measure_time(sort_function, data):
-    start_time = time.time()
-    sort_function(data.copy())
-    end_time = time.time()
-    return end_time - start_time
+    try:
+        start_time = time.time()
+        print(f"Measuring time for {sort_function.__name__}")
+        sort_function(data.copy())
+        end_time = time.time()
+        return end_time - start_time
+    except Exception as e:
+        print(f"An error occurred in {sort_function.__name__}: {e}")
+        raise
 
 # Main
 if __name__ == "__main__":
@@ -88,6 +98,9 @@ if __name__ == "__main__":
     results = []
 
     for name, func in algorithms.items():
-        duration = measure_time(func, data)
-        results.append((name, duration))
-        print(f"{name}: {duration:.6f} seconds")
+        try:
+            duration = measure_time(func, data)
+            results.append((name, duration))
+            print(f"{name}: {duration:.6f} seconds")
+        except Exception as e:
+            print(f"Error when running {name}: {e}")
