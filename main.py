@@ -88,7 +88,7 @@ if __name__ == "__main__":
     data = generate_data(data_size)
 
     algorithms = {
-        "Bubble Sort": bubble_sort,
+        # "Bubble Sort": bubble_sort,
         "Insertion Sort": insertion_sort,
         "Selection Sort": selection_sort,
         "Quick Sort": quick_sort,
