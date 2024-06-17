@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
 import random
+import json
 
 # Define função geradora de números aleatórios
 def generate_data(size):
@@ -79,44 +80,53 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         if self.path == '/sort':
-            # Get the length of the data
-            content_length = int(self.headers['Content-Length'])
-            
-            # Read the data
-            post_data = self.rfile.read(content_length)
-            
-            # Parse the data (assuming it's urlencoded)
-            parsed_data = urllib.parse.parse_qs(post_data.decode('utf-8'))
-            
-            # Get the numbers to be sorted
-            numbers = int(parsed_data.get('numbers')[0])
-            
-            # Generate random numbers 
-            data = generate_data(numbers)
-            
-            # Get the sorting algorithm from the headers
-            sorting_algorithm = self.headers.get('Sorting-Algorithm')
-            
-            if sorting_algorithm == 'bubble_sort':
-                sorted_numbers = bubble_sort(data)
-            elif sorting_algorithm == 'quick_sort':
-                sorted_numbers = quick_sort(data)
-            elif sorting_algorithm == 'insertion_sort':
-                sorted_numbers = insertion_sort(data)
-            elif sorting_algorithm == 'selection_sort':
-                sorted_numbers = selection_sort(data)
-            elif sorting_algorithm == 'merge_sort':
-                sorted_numbers = merge_sort(data)
-            else:
-                sorted_numbers = 'Invalid sorting algorithm specified'
-            
-            # Respond to the client
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            
-            response = f'Sorted numbers: Success'.encode('utf-8')
-            self.wfile.write(response)
+            try:
+                # Get the length of the data
+                content_length = int(self.headers['Content-Length'])
+                
+                # Read the data
+                post_data = self.rfile.read(content_length)
+                
+                # Parse the data (assuming it's urlencoded)
+                parsed_data = urllib.parse.parse_qs(post_data.decode('utf-8'))
+                
+                # Get the numbers to be sorted
+                numbers = int(parsed_data.get('numbers')[0])
+                
+                # Generate random numbers 
+                data = generate_data(numbers)
+                
+                # Get the sorting algorithm from the headers
+                sorting_algorithm = self.headers.get('Sorting-Algorithm')
+                
+                if sorting_algorithm == 'bubble_sort':
+                    sorted_numbers = bubble_sort(data)
+                elif sorting_algorithm == 'quick_sort':
+                    sorted_numbers = quick_sort(data)
+                elif sorting_algorithm == 'insertion_sort':
+                    sorted_numbers = insertion_sort(data)
+                elif sorting_algorithm == 'selection_sort':
+                    sorted_numbers = selection_sort(data)
+                elif sorting_algorithm == 'merge_sort':
+                    sorted_numbers = merge_sort(data)
+                else:
+                    sorted_numbers = 'Invalid sorting algorithm specified'
+                
+                # Respond to the client
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                
+                response = {
+                    'sorted_numbers': sorted_numbers,
+                    'algorithm': sorting_algorithm
+                }
+                self.wfile.write(json.dumps(response).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(f"Internal server error: {str(e)}".encode('utf-8'))
         else:
             self.send_response(404)
             self.end_headers()
