@@ -5,7 +5,7 @@ import json
 
 # Define função geradora de números aleatórios
 def generate_data(size):
-    return [random.sample(range(size * 10), size)]
+    return random.sample(range(size * 10), size)
 
 # Define alguns algoritmos de ordenação
 def bubble_sort(numbers):
