@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
+import random
 
 # Define função geradora de números aleatórios
 def generate_data(size):
@@ -24,18 +25,16 @@ def quick_sort(numbers):
     return quick_sort(left) + middle + quick_sort(right)
 
 def insertion_sort(arr):
-    print(f"Running insertion_sort on data of size {len(arr)}")
     for i in range(1, len(arr)):
         key = arr[i]
         j = i-1
         while j >= 0 and key < arr[j]:
-            arr[j + 1] = arr[j]
+            arr[j + 1] = key
             j -= 1
         arr[j + 1] = key
     return arr
 
 def selection_sort(arr):
-    print(f"Running selection_sort on data of size {len(arr)}")
     for i in range(len(arr)):
         min_idx = i
         for j in range(i+1, len(arr)):
@@ -45,7 +44,6 @@ def selection_sort(arr):
     return arr
 
 def merge_sort(arr):
-    print(f"Running merge_sort on data of size {len(arr)}")
     if len(arr) <= 1:
         return arr
     mid = len(arr) // 2
@@ -68,49 +66,60 @@ def merge(left, right):
     return result
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        # Get the length of the data
-        content_length = int(self.headers['Content-Length'])
-        
-        # Read the data
-        post_data = self.rfile.read(content_length)
-        
-        # Parse the data (assuming it's urlencoded)
-        parsed_data = urllib.parse.parse_qs(post_data.decode('utf-8'))
-        
-        # Get the numbers to be sorted
-        numbers = parsed_data.get('numbers')
-        
-        # Generate random numbers 
-        data = generate_data(numbers)
-        
-        # Get the sorting algorithm from the headers
-        sorting_algorithm = self.headers.get('Sorting-Algorithm')
-        
-        if sorting_algorithm == 'bubble_sort':
-            sorted_numbers = bubble_sort(data)
-        elif sorting_algorithm == 'quick_sort':
-            sorted_numbers = quick_sort(data)
-        elif sorting_algorithm == 'insertion_sort':
-            sorted_numbers = insertion_sort(data)
-        elif sorting_algorithm == 'selection_sort':
-             sorted_numbers = selection_sort(data)
-        elif sorting_algorithm == 'merge_sort':
-             sorted_numbers = merge_sort(data)
+    def do_GET(self):
+        if self.path == '/health':
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.end_headers()
+            response = {'status': 'healthy'}
+            self.wfile.write(str(response).encode('utf-8'))
         else:
-            sorted_numbers = 'Invalid sorting algorithm specified'
-        
-        # Process the data (print it in this example)
-        # print(f'Received numbers: {numbers}')
-        # print(f'Sorted numbers: {sorted_numbers}')
-        
-        # Respond to the client
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        
-        response = f'Sorted numbers: Sucess'.encode('utf-8')
-        self.wfile.write(response)
+            self.send_response(404)
+            self.end_headers()
+
+    def do_POST(self):
+        if self.path == '/sort':
+            # Get the length of the data
+            content_length = int(self.headers['Content-Length'])
+            
+            # Read the data
+            post_data = self.rfile.read(content_length)
+            
+            # Parse the data (assuming it's urlencoded)
+            parsed_data = urllib.parse.parse_qs(post_data.decode('utf-8'))
+            
+            # Get the numbers to be sorted
+            numbers = int(parsed_data.get('numbers')[0])
+            
+            # Generate random numbers 
+            data = generate_data(numbers)
+            
+            # Get the sorting algorithm from the headers
+            sorting_algorithm = self.headers.get('Sorting-Algorithm')
+            
+            if sorting_algorithm == 'bubble_sort':
+                sorted_numbers = bubble_sort(data)
+            elif sorting_algorithm == 'quick_sort':
+                sorted_numbers = quick_sort(data)
+            elif sorting_algorithm == 'insertion_sort':
+                sorted_numbers = insertion_sort(data)
+            elif sorting_algorithm == 'selection_sort':
+                sorted_numbers = selection_sort(data)
+            elif sorting_algorithm == 'merge_sort':
+                sorted_numbers = merge_sort(data)
+            else:
+                sorted_numbers = 'Invalid sorting algorithm specified'
+            
+            # Respond to the client
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            
+            response = f'Sorted numbers: Success'.encode('utf-8')
+            self.wfile.write(response)
+        else:
+            self.send_response(404)
+            self.end_headers()
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=80):
     server_address = ('', port)
