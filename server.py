@@ -1,6 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
 
+# Define função geradora de números aleatórios
+def generate_data(size):
+    return [random.randint(0, size) for _ in range(size)]
+
 # Define alguns algoritmos de ordenação
 def bubble_sort(numbers):
     n = len(numbers)
@@ -76,36 +80,36 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         
         # Get the numbers to be sorted
         numbers = parsed_data.get('numbers')
-        if numbers:
-            # Convert the numbers from strings to integers
-            numbers = list(map(int, numbers[0].split(',')))
+        
+        # Generate random numbers 
+        data = generate_data(numbers)
         
         # Get the sorting algorithm from the headers
         sorting_algorithm = self.headers.get('Sorting-Algorithm')
         
         if sorting_algorithm == 'bubble_sort':
-            sorted_numbers = bubble_sort(numbers)
+            sorted_numbers = bubble_sort(data)
         elif sorting_algorithm == 'quick_sort':
-            sorted_numbers = quick_sort(numbers)
+            sorted_numbers = quick_sort(data)
         elif sorting_algorithm == 'insertion_sort':
-            sorted_numbers = insertion_sort(numbers)
+            sorted_numbers = insertion_sort(data)
         elif sorting_algorithm == 'selection_sort':
-             sorted_numbers = selection_sort(numbers)
-        elif sorting_algorithm == merge_sort(numbers)
-             sorted_numbers = merge_sort(numbers)
+             sorted_numbers = selection_sort(data)
+        elif sorting_algorithm == 'merge_sort':
+             sorted_numbers = merge_sort(data)
         else:
             sorted_numbers = 'Invalid sorting algorithm specified'
         
         # Process the data (print it in this example)
-        print(f'Received numbers: {numbers}')
-        print(f'Sorted numbers: {sorted_numbers}')
+        # print(f'Received numbers: {numbers}')
+        # print(f'Sorted numbers: {sorted_numbers}')
         
         # Respond to the client
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         
-        response = f'Sorted numbers: {sorted_numbers}'.encode('utf-8')
+        response = f'Sorted numbers: Sucess'.encode('utf-8')
         self.wfile.write(response)
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=80):
