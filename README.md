@@ -1,4 +1,4 @@
-﻿_DEPARTAMENTO DE CIÊNCIAS DE COMPUTAÇÃO E ESTATÍSTICA DISCIPLINA: Sistemas Distribuídos - 1972SCC_
+_DEPARTAMENTO DE CIÊNCIAS DE COMPUTAÇÃO E ESTATÍSTICA DISCIPLINA: Sistemas Distribuídos - 1972SCC_
 
 ### <center>17/06/2024</center>
 
@@ -235,12 +235,12 @@ Assim, podemos visualizar que o tempo total médio entre o desligamento entre um
 
 ## 10. Insertion<a name="_page7_x72.00_y497.97"></a> Sort com 100 mil números
 
-![](Aspose.Words.b9af3322-8bd0-4e4b-8e0d-fa6f801d2528.006.jpeg)
+![](./README/Aspose.Words.b9af3322-8bd0-4e4b-8e0d-fa6f801d2528.006.jpeg)
 
 Aqui, tivemos uma ocupação da CPU muito próxima de 100%, e taxas de entrada da rede de 383kB e taxa de saída de 15.4MB.
 
-## 3. Quick Sort com 10 milhões de números
+## 11. Quick Sort com 10 milhões de números
 
-![](Aspose.Words.b9af3322-8bd0-4e4b-8e0d-fa6f801d2528.007.jpeg)
+![](./README/Aspose.Words.b9af3322-8bd0-4e4b-8e0d-fa6f801d2528.007.jpeg)
 
 <a name="_page8_x72.00_y90.51"></a>Neste outro caso, também tivemos taxas de ocupação da CPU muito próximas de 100%, e taxas de entrada da rede em 1.74MB e de saída de 43.9MB.
